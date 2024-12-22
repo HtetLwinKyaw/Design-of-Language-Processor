@@ -3,7 +3,7 @@ class DFA3:
         self.state = 'q0'  # Initial state
         self.transitions = {
             'q0': {char: 'q1' for char in 'abcdefghijklmnopqrstuvwxyz'},  # Alphabet starts
-            'q1': {char: 'q1' for char in 'abcdefghijklmnopqrstuvwxyz0123456789'},  # Any valid character
+            'q1': {char: 'q1' for char in 'abcdefghijklmnopqrstuvwxyz0123456789'},  # valid character
         }
         self.accepting_states = {'q1'}  # Accepting state
     

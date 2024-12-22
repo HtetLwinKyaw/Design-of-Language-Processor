@@ -1,0 +1,47 @@
+Practical - 1
+
+RE= a*bb
+
+Test Cases: 
+
+aaabb
+Abab
+
+bbbb
+aaa
+baaabb
+aaabbb
+baaabb
+aaaab
+abbabb
+abb
+aaaaabb
+
+
+Practical - 2
+
+number of input symbols: 2
+input symbols: a,b
+number of states: 4
+initial state: 1
+number of accepting states: 1
+accepting state: 2
+Transition table: 
+1 to a -> 2
+1 to b -> 3
+2 to a -> 1
+2 to b -> 4
+3 to a -> 4
+3 to b -> 1
+4 to a -> 3
+4 to b -> 2
+
+example string: abbabab (valid string)
+
+Test Cases:
+
+String over 0 and 1 where every 0 immediately followed by 11
+string over a b c, starts and end with same letter
+string over lower-case alphabet and digits, starts with alphabet only
+
+
