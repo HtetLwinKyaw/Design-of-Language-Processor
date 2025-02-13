@@ -1,5 +1,7 @@
 %{
 #include <stdio.h>
+
+int yywrap() { return 1; }  // Add this function to prevent linker error
 %}
 
 %%
