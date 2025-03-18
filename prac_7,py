@@ -1,0 +1,68 @@
+from collections import defaultdict
+
+grammar = {
+    "S": [["A", "B", "C"], ["D"]],
+    "A": [["a"], ["ε"]],
+    "B": [["b"], ["ε"]],
+    "C": [["(", "S", ")"], ["c"]],
+    "D": [["A", "C"]]
+}
+
+first_sets = defaultdict(set)
+follow_sets = defaultdict(set)
+
+# Compute First Sets
+def compute_first(symbol):
+    if symbol in first_sets and first_sets[symbol]:
+        return first_sets[symbol]
+    
+    if symbol not in grammar:
+        return {symbol}
+    
+    first = set()
+    for production in grammar[symbol]:
+        for item in production:
+            first_part = compute_first(item)
+            first.update(first_part - {"ε"})
+            if "ε" not in first_part:
+                break
+        else:
+            first.add("ε")
+    
+    first_sets[symbol] = first
+    return first
+
+for non_terminal in grammar:
+    compute_first(non_terminal)
+
+# Compute Follow Sets
+follow_sets["S"].add("$")  # Start symbol follow includes $
+def compute_follow(symbol):
+    for lhs, productions in grammar.items():
+        for production in productions:
+            for i, item in enumerate(production):
+                if item == symbol:
+                    next_symbols = production[i + 1:]
+                    if next_symbols:
+                        first_next = set()
+                        for next_symbol in next_symbols:
+                            first_next.update(compute_first(next_symbol) - {"ε"})
+                            if "ε" not in compute_first(next_symbol):
+                                break
+                        else:
+                            first_next.update(follow_sets[lhs])
+                        follow_sets[symbol].update(first_next)
+                    else:
+                        follow_sets[symbol].update(follow_sets[lhs])
+
+for _ in range(len(grammar)):
+    for non_terminal in grammar:
+        compute_follow(non_terminal)
+
+# Print results
+def print_sets(name, sets):
+    for key, value in sorted(sets.items()):
+        print(f"{name}({key}) = {{{', '.join(value)}}}")
+
+print_sets("First", first_sets)
+print_sets("Follow", follow_sets)

@@ -11,16 +11,24 @@ bool S();
 bool L();
 bool LPrime();
 
-// Recursive Descent Parser Functions
+// Function to skip spaces
+void skipSpaces() {
+    while (i < input.length() && input[i] == ' ') {
+        i++;
+    }
+}
 
 // S → ( L ) | a
 bool S() {
+    skipSpaces();
     if (i < input.length() && input[i] == 'a') {
         i++; // Consume 'a'
         return true;
     } else if (i < input.length() && input[i] == '(') {
         i++; // Consume '('
+        skipSpaces();
         if (L()) {
+            skipSpaces();
             if (i < input.length() && input[i] == ')') {
                 i++; // Consume ')'
                 return true;
@@ -33,6 +41,7 @@ bool S() {
 // L → S L'
 bool L() {
     if (S()) {
+        skipSpaces();
         return LPrime();
     }
     return false;
@@ -40,8 +49,10 @@ bool L() {
 
 // L' → , S L' | ε
 bool LPrime() {
+    skipSpaces();
     if (i < input.length() && input[i] == ',') {
         i++; // Consume ','
+        skipSpaces();
         if (S()) {
             return LPrime();
         } else {
@@ -65,13 +76,10 @@ void validate(string str) {
 
 // Main function to test the parser
 int main() {
-    string test_cases[] = {
-        "a", "(a)", "(a,a)", "(a,a,a)", "(a,a),(a,a)", "a,a", "(a,a,a)a"
-    };
+    string user_input;
+    cout << "Enter a string to validate: ";
+    getline(cin, user_input);  // Read full input including spaces
 
-    for (const string& test : test_cases) {
-        cout << "Input: " << test << " -> ";
-        validate(test);
-    }
+    validate(user_input);
     return 0;
 }
